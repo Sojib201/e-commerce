@@ -77,6 +77,8 @@ class _HomePageState extends State<HomePage> {
               final categories = state.homeData.homepageCategories ?? [];
               final newArrivals = state.homeData.newArrivalProducts ?? [];
 
+              debugPrint('new arrival list:${newArrivals.length}');
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
