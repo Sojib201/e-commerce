@@ -133,7 +133,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProductListPage(),
+                                ),
+                              );
+                            },
                             child: Text(
                               'See all',
                               style: TextStyle(
@@ -194,31 +201,10 @@ class _HomePageState extends State<HomePage> {
                               color: AppColors.textPrimary,
                             ),
                           ),
-                          Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ProductListPage(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'See all',
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ),
-                              Icon(
-                                Icons.tune,
-                                size: 20.sp,
-                                color: AppColors.textPrimary,
-                              ),
-                            ],
+                          Icon(
+                            Icons.tune,
+                            size: 20.sp,
+                            color: AppColors.textPrimary,
                           ),
                         ],
                       ),

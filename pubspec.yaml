@@ -46,12 +46,8 @@ dev_dependencies:
   http: ^1.6.0
   cached_network_image: ^3.4.1
   flutter_rating_bar: ^4.0.1
-  get_it: ^9.2.0
-  dartz: ^0.10.1
   dio: ^5.9.0
-  go_router:
   flutter_html: ^3.0.0
-  shimmer: ^3.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -17,7 +17,7 @@ class ProductCard extends Widget {
   final VoidCallback? onTap;
 
   const ProductCard({
-    Key? key,
+    super.key,
     this.name,
     this.shortName,
     this.thumbImage,
@@ -26,7 +26,7 @@ class ProductCard extends Widget {
     this.averageRating,
     required this.slug,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Element createElement() => _ProductCardElement(this);
