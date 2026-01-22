@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/image_helper.dart';
 import '../bloc/home/home_bloc.dart';
 import '../bloc/home/home_event.dart';
 import '../bloc/home/home_state.dart';
-import '../widgets/category_item.dart';
 import '../widgets/product_card_data.dart';
 import 'product_list_page.dart';
 import 'product_details_page.dart';
 import 'category_products_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFFF9F9F9),
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -77,48 +79,31 @@ class _HomePageState extends State<HomePage> {
               final categories = state.homeData.homepageCategories ?? [];
               final newArrivals = state.homeData.newArrivalProducts ?? [];
 
-              debugPrint('new arrival list:${newArrivals.length}');
-
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Search Bar
                     Padding(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                       child: Container(
-                        height: 48.h,
+                        height: 45.h,
                         decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(24.r),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(color: Colors.black12, width: 0.5),
                         ),
-                        child: Row(
-                          children: [
-                            SizedBox(width: 16.w),
-                            Icon(
-                              Icons.search,
-                              color: AppColors.textSecondary,
-                              size: 20.sp,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Search products',
-                                  hintStyle: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 14.sp,
-                                  ),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search products',
+                            hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                            prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20.sp),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+                          ),
                         ),
                       ),
                     ),
 
-                    // Categories Section
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Row(
@@ -126,91 +111,141 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             'Categories',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ProductListPage(),
-                                ),
-                              );
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListPage()));
                             },
                             child: Text(
                               'See all',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: AppColors.primary,
-                              ),
+                              style: TextStyle(fontSize: 14.sp, color: const Color(0xFFC6A34F), fontWeight: FontWeight.w500),
                             ),
                           ),
                         ],
                       ),
                     ),
 
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 15.h),
 
                     SizedBox(
-                      height: 110.h,
+                      height: 100.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        itemCount: categories.length > 4 ? 4 : categories.length,
+                        padding: EdgeInsets.only(left: 16.w),
+                        itemCount: categories.length,
                         itemBuilder: (context, index) {
                           final category = categories[index];
                           return Padding(
-                            padding: EdgeInsets.only(right: 16.w),
-                            child: CategoryItem(
-                              name: category.name,
-                              image: category.image,
+                            padding: EdgeInsets.only(right: 20.w),
+                            child: GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CategoryProductsPage(
-                                      categoryId: category.id!,
-                                      categoryName: category.name!,
-                                    ),
+                                    builder: (context) =>
+                                        CategoryProductsPage(
+                                          categoryId: category.id!,
+                                          categoryName: category.name!,
+                                        ),
                                   ),
                                 );
                               },
+                              child: Column(
+                                children: [
+                                  // Container(
+                                  //   padding: EdgeInsets.all(12.w),
+                                  //   decoration: const BoxDecoration(color: Color(0xFFFDF7E7), shape: BoxShape.circle),
+                                  //   child: Image.network(ImageHelper.getFullImageUrl(category.image), height: 35.h, width: 35.w),
+                                  // ),
+                                  Container(
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.background,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      child: category.image != null
+                                          ? CachedNetworkImage(
+                                        imageUrl: ImageHelper.getFullImageUrl(category.image),
+                                        height: 40.h,
+                                        width: 40.w,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => Center(
+                                          child: CircularProgressIndicator(
+                                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                                            strokeWidth: 2.w,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) => Icon(
+                                          Icons.category,
+                                          size: 32.sp,
+                                          color: AppColors.textSecondary,
+                                        ),
+                                      )
+                                          : Icon(
+                                        Icons.category,
+                                        size: 32.sp,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(category.name ?? '', style: TextStyle(fontSize: 12.sp, color: Colors.grey[700])),
+                                ],
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
 
-                    SizedBox(height: 24.h),
+                    // SizedBox(
+                    //   height: 110.h,
+                    //   child: ListView.builder(
+                    //     scrollDirection: Axis.horizontal,
+                    //     padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    //     itemCount: categories.length > 4 ? 4 : categories
+                    //         .length,
+                    //     itemBuilder: (context, index) {
+                    //       final category = categories[index];
+                    //       return Padding(
+                    //         padding: EdgeInsets.only(right: 16.w),
+                    //         child: CategoryItem(
+                    //           name: category.name,
+                    //           image: category.image,
+                    //           onTap: () {
+                    //             Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                 builder: (context) =>
+                    //                     CategoryProductsPage(
+                    //                       categoryId: category.id!,
+                    //                       categoryName: category.name!,
+                    //                     ),
+                    //               ),
+                    //             );
+                    //           },
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
 
-                    // New Arrivals Section
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'New Arrivals',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
-                          Icon(
-                            Icons.tune,
-                            size: 20.sp,
-                            color: AppColors.textPrimary,
-                          ),
+                          Icon(Icons.tune, size: 22.sp, color: Colors.black54),
                         ],
                       ),
                     ),
-
-                    SizedBox(height: 16.h),
 
                     GridView.builder(
                       shrinkWrap: true,
@@ -218,11 +253,11 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        crossAxisSpacing: 12.w,
-                        mainAxisSpacing: 12.h,
-                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 15.w,
+                        mainAxisSpacing: 15.h,
+                        childAspectRatio: 0.72,
                       ),
-                      itemCount: newArrivals.length > 6 ? 6 : newArrivals.length,
+                      itemCount: newArrivals.length,
                       itemBuilder: (context, index) {
                         final product = newArrivals[index];
                         return ProductCard(
@@ -231,28 +266,18 @@ class _HomePageState extends State<HomePage> {
                           thumbImage: product.thumbImage,
                           price: product.price,
                           offerPrice: product.offerPrice,
-                          averageRating: product.averageRating,
                           slug: product.slug!,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProductDetailsPage(
-                                  slug: product.slug!,
-                                ),
-                              ),
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsPage(slug: product.slug!)));
                           },
                         );
                       },
                     ),
-
-                    SizedBox(height: 100.h),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               );
             }
-
             return const SizedBox();
           },
         ),
@@ -290,6 +315,7 @@ class _HomePageState extends State<HomePage> {
 
 
 
+
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -299,6 +325,7 @@ class _HomePageState extends State<HomePage> {
 // import '../bloc/home/home_state.dart';
 // import '../widgets/category_item.dart';
 // import '../widgets/product_card_data.dart';
+// import 'product_list_page.dart';
 // import 'product_details_page.dart';
 // import 'category_products_page.dart';
 //
@@ -347,6 +374,7 @@ class _HomePageState extends State<HomePage> {
 //                     Text(
 //                       'Error: ${state.message}',
 //                       style: TextStyle(fontSize: 16.sp),
+//                       textAlign: TextAlign.center,
 //                     ),
 //                     SizedBox(height: 16.h),
 //                     ElevatedButton(
@@ -366,6 +394,8 @@ class _HomePageState extends State<HomePage> {
 //             if (state is HomeLoaded) {
 //               final categories = state.homeData.homepageCategories ?? [];
 //               final newArrivals = state.homeData.newArrivalProducts ?? [];
+//
+//               debugPrint('new arrival list:${newArrivals.length}');
 //
 //               return SingleChildScrollView(
 //                 child: Column(
@@ -421,7 +451,14 @@ class _HomePageState extends State<HomePage> {
 //                             ),
 //                           ),
 //                           TextButton(
-//                             onPressed: () {},
+//                             onPressed: () {
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) => const ProductListPage(),
+//                                 ),
+//                               );
+//                             },
 //                             child: Text(
 //                               'See all',
 //                               style: TextStyle(
@@ -503,7 +540,7 @@ class _HomePageState extends State<HomePage> {
 //                         mainAxisSpacing: 12.h,
 //                         childAspectRatio: 0.7,
 //                       ),
-//                       itemCount: newArrivals.length,
+//                       itemCount: newArrivals.length > 6 ? 6 : newArrivals.length,
 //                       itemBuilder: (context, index) {
 //                         final product = newArrivals[index];
 //                         return ProductCard(
@@ -568,3 +605,4 @@ class _HomePageState extends State<HomePage> {
 //     );
 //   }
 // }
+//

@@ -104,7 +104,7 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                   thumbImage: product.thumbImage,
                   price: product.price?.toDouble(),
                   offerPrice: product.offerPrice,
-                  averageRating: product.averageRating,
+                  //averageRating: product.averageRating,
                   slug: product.slug!,
                   onTap: () {
                     Navigator.push(
