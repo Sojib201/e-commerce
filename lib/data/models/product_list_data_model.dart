@@ -26,7 +26,7 @@ class ProductListDataModel {
 
 class Products {
   int? currentPage;
-  List<Datum>? data;
+  List<ProductData>? data;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -57,7 +57,7 @@ class Products {
 
   factory Products.fromJson(Map<String, dynamic> json) => Products(
     currentPage: json["current_page"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+    data: json["data"] == null ? [] : List<ProductData>.from(json["data"]!.map((x) => ProductData.fromJson(x))),
     firstPageUrl: json["first_page_url"],
     from: json["from"],
     lastPage: json["last_page"],
@@ -88,7 +88,7 @@ class Products {
   };
 }
 
-class Datum {
+class ProductData {
   int? id;
   String? name;
   String? shortName;
@@ -111,7 +111,7 @@ class Datum {
   dynamic totalSold;
   List<dynamic>? activeVariants;
 
-  Datum({
+  ProductData({
     this.id,
     this.name,
     this.shortName,
@@ -135,7 +135,7 @@ class Datum {
     this.activeVariants,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
     id: json["id"],
     name: json["name"],
     shortName: json["short_name"],

@@ -1,13 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/models/product_list_data_model.dart';
 import '../../../domain/usecases/get_products.dart';
 import '../../../domain/usecases/get_products_by_category.dart';
-import '../../../data/models/product_list_data_model.dart';
 import 'product_event.dart';
 import 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProducts getProducts;
   final GetProductsByCategory getProductsByCategory;
+
+  List<ProductData>  _allFetchedProducts = [];
 
   ProductBloc({
     required this.getProducts,
@@ -16,18 +18,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<LoadProducts>(_onLoadProducts);
     on<LoadMoreProducts>(_onLoadMoreProducts);
     on<LoadProductsByCategory>(_onLoadProductsByCategory);
+    on<SearchProducts>(_onSearchProducts);
   }
 
-  Future<void> _onLoadProducts(
-      LoadProducts event,
-      Emitter<ProductState> emit,
-      ) async {
+  Future<void> _onLoadProducts(LoadProducts event, Emitter<ProductState> emit) async {
     if (event.loadMore && state is ProductLoaded) {
-      // Loading more products
       final currentState = state as ProductLoaded;
       emit(ProductLoadingMore(currentState.allProducts));
     } else {
-      // Initial load
       emit(ProductLoading());
     }
 
@@ -45,8 +43,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         final lastPage = products.lastPage ?? 1;
         final hasReachedMax = currentPage >= lastPage;
 
+        if (event.page == 1) {
+          _allFetchedProducts = List.from(newProducts);
+        } else {
+          _allFetchedProducts.addAll(newProducts);
+        }
+
         if (event.loadMore && state is ProductLoadingMore) {
-          // Append new products to existing list
           final currentState = state as ProductLoadingMore;
           final updatedProducts = [...currentState.currentProducts, ...newProducts];
 
@@ -57,7 +60,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             currentPage: currentPage,
           ));
         } else {
-          // Initial load
           emit(ProductLoaded(
             productData: productData,
             allProducts: newProducts,
@@ -67,6 +69,24 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         }
       }
     }
+  }
+
+  void _onSearchProducts(SearchProducts event, Emitter<ProductState> emit) {
+    if (event.query.isEmpty) {
+      if (_allFetchedProducts.isNotEmpty) {
+        add(const LoadProducts());
+      }
+      return;
+    }
+
+    final filteredList = _allFetchedProducts.where((product) {
+      final name = product.name?.toLowerCase() ?? "";
+      final shortName = product.shortName?.toLowerCase() ?? "";
+      final query = event.query.toLowerCase();
+      return name.contains(query) || shortName.contains(query);
+    }).toList();
+
+    emit(ProductSearchLoaded(filteredList));
   }
 
   Future<void> _onLoadMoreProducts(
@@ -99,52 +119,3 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   }
 }
 
-
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import '../../../domain/usecases/get_products.dart';
-// import '../../../domain/usecases/get_products_by_category.dart';
-// import 'product_event.dart';
-// import 'product_state.dart';
-//
-// class ProductBloc extends Bloc<ProductEvent, ProductState> {
-//   final GetProducts getProducts;
-//   final GetProductsByCategory getProductsByCategory;
-//
-//   ProductBloc({
-//     required this.getProducts,
-//     required this.getProductsByCategory,
-//   }) : super(ProductInitial()) {
-//     on<LoadProducts>(_onLoadProducts);
-//     on<LoadProductsByCategory>(_onLoadProductsByCategory);
-//   }
-//
-//   Future<void> _onLoadProducts(
-//       LoadProducts event,
-//       Emitter<ProductState> emit,
-//       ) async {
-//     emit(ProductLoading());
-//
-//     final result = await getProducts(page: event.page);
-//
-//     if (result.failure != null) {
-//       emit(ProductError(result.failure!.message));
-//     } else if (result.data != null) {
-//       emit(ProductLoaded(result.data!));
-//     }
-//   }
-//
-//   Future<void> _onLoadProductsByCategory(
-//       LoadProductsByCategory event,
-//       Emitter<ProductState> emit,
-//       ) async {
-//     emit(ProductLoading());
-//
-//     final result = await getProductsByCategory(event.categoryId);
-//
-//     if (result.failure != null) {
-//       emit(ProductError(result.failure!.message));
-//     } else if (result.data != null) {
-//       emit(ProductCategoryLoaded(result.data!));
-//     }
-//   }
-// }

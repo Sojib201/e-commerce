@@ -14,7 +14,7 @@ class ProductInitial extends ProductState {}
 class ProductLoading extends ProductState {}
 
 class ProductLoadingMore extends ProductState {
-  final List<Datum> currentProducts;
+  final List<ProductData> currentProducts;
 
   const ProductLoadingMore(this.currentProducts);
 
@@ -24,7 +24,7 @@ class ProductLoadingMore extends ProductState {
 
 class ProductLoaded extends ProductState {
   final ProductListDataModel productData;
-  final List<Datum> allProducts;
+  final List<ProductData> allProducts;
   final bool hasReachedMax;
   final int currentPage;
 
@@ -37,7 +37,7 @@ class ProductLoaded extends ProductState {
 
   ProductLoaded copyWith({
     ProductListDataModel? productData,
-    List<Datum>? allProducts,
+    List<ProductData>? allProducts,
     bool? hasReachedMax,
     int? currentPage,
   }) {
@@ -71,45 +71,10 @@ class ProductError extends ProductState {
   List<Object> get props => [message];
 }
 
+class ProductSearchLoaded extends ProductState {
+  final List<ProductData> searchResults;
+  const ProductSearchLoaded(this.searchResults);
 
-// import 'package:equatable/equatable.dart';
-// import '../../../data/models/product_list_data_model.dart';
-// import '../../../data/models/product_by_category_data_model.dart';
-//
-// abstract class ProductState extends Equatable {
-//   const ProductState();
-//
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class ProductInitial extends ProductState {}
-//
-// class ProductLoading extends ProductState {}
-//
-// class ProductLoaded extends ProductState {
-//   final ProductListDataModel productData;
-//
-//   const ProductLoaded(this.productData);
-//
-//   @override
-//   List<Object> get props => [productData];
-// }
-//
-// class ProductCategoryLoaded extends ProductState {
-//   final ProductByCategoryDataModel productData;
-//
-//   const ProductCategoryLoaded(this.productData);
-//
-//   @override
-//   List<Object> get props => [productData];
-// }
-//
-// class ProductError extends ProductState {
-//   final String message;
-//
-//   const ProductError(this.message);
-//
-//   @override
-//   List<Object> get props => [message];
-// }
+  @override
+  List<Object> get props => [searchResults];
+}
