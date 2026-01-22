@@ -43,6 +43,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ...gallery.map((g) => g.image ?? '')
             ];
 
+            debugPrint('all image:${allImages.toString()}');
+
             final displayPrice = product?.offerPrice ?? product?.price ?? 0;
             final oldPrice = product?.price;
             final hasDiscount = product?.offerPrice != null && product?.offerPrice != product?.price;
@@ -164,42 +166,45 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: List.generate(allImages.length, (index) {
-                                    return GestureDetector(
-                                      onTap: () => setState(() => _selectedImageIndex = index),
-                                      child: Container(
-                                        width: 65.w,
-                                        height: 65.h,
-                                        margin: EdgeInsets.symmetric(horizontal: 6.w),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 5),
-                                            )
-                                          ],
-                                          border: Border.all(
-                                            color: _selectedImageIndex == index
-                                                ? const Color(0xFFFFCC33)
-                                                : Colors.transparent,
-                                            width: 2,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: List.generate(allImages.length, (index) {
+                                      return GestureDetector(
+                                        onTap: () => setState(() => _selectedImageIndex = index),
+                                        child: Container(
+                                          width: 65.w,
+                                          height: 65.h,
+                                          margin: EdgeInsets.symmetric(horizontal: 6.w),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.05),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 5),
+                                              )
+                                            ],
+                                            border: Border.all(
+                                              color: _selectedImageIndex == index
+                                                  ? const Color(0xFFFFCC33)
+                                                  : Colors.transparent,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.r),
+                                            child: CachedNetworkImage(
+                                              imageUrl: ImageHelper.getFullImageUrl(allImages[index]),
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
                                         ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8.r),
-                                          child: CachedNetworkImage(
-                                            imageUrl: ImageHelper.getFullImageUrl(allImages[index]),
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
+                                      );
+                                    }),
+                                  ),
                                 ),
                               ),
                             ),
