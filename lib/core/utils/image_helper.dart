@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../constants/api_constants.dart';
 
 class ImageHelper {
@@ -8,6 +10,8 @@ class ImageHelper {
     if (imagePath.startsWith('http')) {
       return imagePath;
     }
+    debugPrint("image path: ${ApiConstants.imageBaseUrl + imagePath}");
     return ApiConstants.imageBaseUrl + imagePath;
+
   }
 }

@@ -30,100 +30,185 @@ class ProductCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
+          color: AppColors.white,
+          //borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- ১. ইমেজ সেকশনকে Expanded দিয়ে র‍্যাপ করা হয়েছে ---
-            // এটি কার্ডের বাকি জায়গা থেকে ইমেজের জন্য যতটুকু সম্ভব জায়গা নিয়ে নেবে
+            // Expanded(
+            //   child: Stack(
+            //     children: [
+            //       Container(
+            //         height: 140.h,
+            //         width: double.infinity,
+            //         decoration: BoxDecoration(
+            //           color: AppColors.white,
+            //           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+            //         ),
+            //         child: ClipRRect(
+            //           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+            //           child: CachedNetworkImage(
+            //             imageUrl: ImageHelper.getFullImageUrl(thumbImage),
+            //             fit: BoxFit.cover,
+            //             placeholder: (context, url) => Center(
+            //               child: CircularProgressIndicator(
+            //                 valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+            //                 strokeWidth: 2.w,
+            //               ),
+            //             ),
+            //             errorWidget: (context, url, error) => const Icon(Icons.error),
+            //           ),
+            //         ),
+            //       ),
+            //       Positioned(
+            //         top: 8.h,
+            //         right: 8.w,
+            //         child: Icon(Icons.favorite, size: 20.sp, color: Colors.grey.shade300),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
             Expanded(
+              flex: 12,
               child: Stack(
                 children: [
                   Container(
-                    height: 140.h,
                     width: double.infinity,
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                      color: AppColors.white,
+                      // borderRadius: BorderRadius.vertical(top: Radius.circular(4.r)),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-                      child: CachedNetworkImage(
-                        imageUrl: ImageHelper.getFullImageUrl(thumbImage),
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                            strokeWidth: 2.w,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                      ),
+                    child: CachedNetworkImage(
+                      imageUrl: ImageHelper.getFullImageUrl(thumbImage),
+                      fit: BoxFit.contain,
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
                   Positioned(
-                    top: 8.h,
-                    right: 8.w,
-                    child: Icon(Icons.favorite_border, size: 20.sp, color: Colors.grey),
+                    top: 6.h,
+                    right: 6.w,
+                    child: Icon(
+                      Icons.favorite,
+                      size: 18.sp,
+                      color: const Color(0xFFD9D9D9),
+                    ),
                   ),
                 ],
               ),
             ),
 
-            // --- ২. ইনফরমেশন সেকশনকে Flexible দিয়ে র‍্যাপ করা হয়েছে ---
-            // Flexible ব্যবহার করা হয়েছে যাতে নিচের টেক্সটগুলো যতটুকু জায়গা দরকার ততটুকু নেয়
+            // Flexible(
+            //   flex: 0,
+            //   child: Padding(
+            //     padding: EdgeInsets.all(10.w),
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Row(
+            //           children: List.generate(5, (index) =>
+            //               Icon(Icons.star, color: Colors.amber, size: 14.sp)
+            //           ),
+            //         ),
+            //         SizedBox(height: 6.h),
+            //
+            //         Text(
+            //           shortName ?? name ?? '',
+            //           style: TextStyle(
+            //             fontSize: 13.sp,
+            //             fontWeight: FontWeight.w500,
+            //             color: Colors.black87,
+            //           ),
+            //           maxLines: 2,
+            //           overflow: TextOverflow.ellipsis,
+            //         ),
+            //         SizedBox(height: 8.h),
+            //
+            //         Row(
+            //           children: [
+            //             Text(
+            //               '\$${offerPrice ?? price}',
+            //               style: TextStyle(
+            //                 fontSize: 16.sp,
+            //                 fontWeight: FontWeight.bold,
+            //                 color: const Color(0xFFE94560),
+            //               ),
+            //             ),
+            //             if (offerPrice != null) ...[
+            //               SizedBox(width: 6.w),
+            //               Text(
+            //                 '\$$price',
+            //                 style: TextStyle(
+            //                   fontSize: 12.sp,
+            //                   color: Colors.grey,
+            //                   decoration: TextDecoration.lineThrough,
+            //                 ),
+            //               ),
+            //             ],
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
             Flexible(
-              flex: 0, // কন্টেন্ট যতটুকু জায়গা নিবে ততটুকুই (বেশি প্রসারিত হবে না)
+              flex: 11,
               child: Padding(
-                padding: EdgeInsets.all(10.w),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // প্রয়োজনীয় জায়গা দখল করবে
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // রেটিং
                     Row(
                       children: List.generate(5, (index) =>
-                          Icon(Icons.star, color: Colors.amber, size: 14.sp)
+                          Padding(
+                            padding: EdgeInsets.only(right: 1.w),
+                            child: Icon(Icons.star, color: Colors.orange, size: 14.sp),
+                          )
                       ),
                     ),
-                    SizedBox(height: 6.h),
 
-                    // প্রোডাক্টের নাম
                     Text(
                       shortName ?? name ?? '',
                       style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF222222),
+                        height: 1.3,
                       ),
-                      maxLines: 2, // ২ লাইনের বেশি হলে কাটবে না
-                      overflow: TextOverflow.ellipsis, // '...' দেখাবে
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 8.h),
 
-                    // প্রাইস সেকশন
-                    Row(
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          '\$${offerPrice ?? price}',
+                          '\$${offerPrice?.toStringAsFixed(0) ?? price?.toStringAsFixed(0)}',
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFFE94560),
+                            color: const Color(0xFFEF262C),
                           ),
                         ),
-                        if (offerPrice != null) ...[
+                        if (offerPrice != null && offerPrice! < price!) ...[
                           SizedBox(width: 6.w),
                           Text(
-                            '\$$price',
+                            '\$${price?.toStringAsFixed(0)}',
                             style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.grey,
+                              fontSize: 13.sp,
+                              color: const Color(0xFFADADAD),
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
@@ -134,6 +219,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
+
           ],
         ),
       ),

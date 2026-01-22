@@ -47,32 +47,24 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      //backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: Container(
-            width: 40.w,
-            height: 40.h,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: AppColors.white,
-              size: 20.sp,
-            ),
-          ),
           onPressed: () => Navigator.pop(context),
+          icon: CircleAvatar(
+            radius: 18.r,
+            backgroundColor: AppColors.primary,
+            child: Icon(Icons.arrow_back_ios_new, size: 16.sp, color: Colors.black),
+          ),
         ),
         title: Text(
           'ALL Product',
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: false,
@@ -131,67 +123,53 @@ class _ProductListPageState extends State<ProductListPage> {
 
             return Column(
               children: [
-                // Search Bar
+
                 Padding(
-                  padding: EdgeInsets.all(16.w),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
                   child: Container(
-                    height: 48.h,
+                    height: 52.h,
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(24.r),
+                      //borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: Colors.black12, width: 0.5),
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 16.w),
-                        Icon(
-                          Icons.search,
-                          color: AppColors.textSecondary,
-                          size: 20.sp,
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search products',
-                              hintStyle: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 14.sp,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search products',
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                        prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20.sp),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                      ),
                     ),
                   ),
                 ),
 
-                // Page Info
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Showing ${products.length} products',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      Text(
-                        'Page $currentPage of $totalPages',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 16.w),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         'Showing ${products.length} products',
+                //         style: TextStyle(
+                //           fontSize: 14.sp,
+                //           color: AppColors.textSecondary,
+                //         ),
+                //       ),
+                //       Text(
+                //         'Page $currentPage of $totalPages',
+                //         style: TextStyle(
+                //           fontSize: 14.sp,
+                //           color: AppColors.textSecondary,
+                //           fontWeight: FontWeight.w500,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
 
-                SizedBox(height: 12.h),
+                SizedBox(height: 10.h),
 
                 Expanded(
                   child: GridView.builder(
@@ -208,7 +186,6 @@ class _ProductListPageState extends State<ProductListPage> {
                         : products.length + 1,
                     itemBuilder: (context, index) {
                       if (index >= products.length) {
-                        // Loading indicator at the bottom
                         return Center(
                           child: Padding(
                             padding: EdgeInsets.all(16.w),
@@ -228,7 +205,6 @@ class _ProductListPageState extends State<ProductListPage> {
                         thumbImage: product.thumbImage,
                         price: product.price?.toDouble(),
                         offerPrice: product.offerPrice?.toDouble(),
-                        //averageRating: product.averageRating,
                         slug: product.slug!,
                         onTap: () {
                           Navigator.push(

@@ -36,21 +36,29 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
+        // leading: IconButton(
+        //   icon: Container(
+        //     width: 40.w,
+        //     height: 40.h,
+        //     decoration: const BoxDecoration(
+        //       color: AppColors.primary,
+        //       shape: BoxShape.circle,
+        //     ),
+        //     child: Icon(
+        //       Icons.arrow_back,
+        //       color: AppColors.white,
+        //       size: 20.sp,
+        //     ),
+        //   ),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
         leading: IconButton(
-          icon: Container(
-            width: 40.w,
-            height: 40.h,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: AppColors.white,
-              size: 20.sp,
-            ),
-          ),
           onPressed: () => Navigator.pop(context),
+          icon: CircleAvatar(
+            radius: 18.r,
+            backgroundColor: AppColors.primary,
+            child: Icon(Icons.arrow_back_ios_new, size: 16.sp, color: Colors.black),
+          ),
         ),
         title: Text(
           widget.categoryName,

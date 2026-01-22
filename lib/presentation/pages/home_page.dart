@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -84,12 +83,12 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.h),
                       child: Container(
-                        height: 45.h,
+                        height: 52.h,
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r),
+                          color: AppColors.white,
+                          //borderRadius: BorderRadius.circular(8.r),
                           border: Border.all(color: Colors.black12, width: 0.5),
                         ),
                         child: TextField(
@@ -98,106 +97,114 @@ class _HomePageState extends State<HomePage> {
                             hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
                             prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20.sp),
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+                            contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                           ),
                         ),
                       ),
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Container(
+                      height: 165.h,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                      ),
+                      child: Column(
                         children: [
-                          Text(
-                            'Categories',
-                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black87),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListPage()));
-                            },
-                            child: Text(
-                              'See all',
-                              style: TextStyle(fontSize: 14.sp, color: const Color(0xFFC6A34F), fontWeight: FontWeight.w500),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Categories',
+                                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black87),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListPage()));
+                                  },
+                                  child: Text(
+                                    'See all',
+                                    style: TextStyle(fontSize: 14.sp, color: Colors.grey, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
 
-                    SizedBox(height: 15.h),
+                          SizedBox(height: 15.h),
 
-                    SizedBox(
-                      height: 100.h,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(left: 16.w),
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          final category = categories[index];
-                          return Padding(
-                            padding: EdgeInsets.only(right: 20.w),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryProductsPage(
-                                          categoryId: category.id!,
-                                          categoryName: category.name!,
+                          SizedBox(
+                            height: 100.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.only(left: 16.w),
+                              itemCount: categories.length,
+                              itemBuilder: (context, index) {
+                                final category = categories[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 20.w),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoryProductsPage(
+                                                categoryId: category.id!,
+                                                categoryName: category.name!,
+                                              ),
                                         ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        // Container(
+                                        //   padding: EdgeInsets.all(12.w),
+                                        //   decoration: const BoxDecoration(color: Color(0xFFFDF7E7), shape: BoxShape.circle),
+                                        //   child: Image.network(ImageHelper.getFullImageUrl(category.image), height: 35.h, width: 35.w),
+                                        // ),
+                                        Container(
+                                          padding: EdgeInsets.all(20.r),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.lightYellow,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: category.image != null
+                                              ? CachedNetworkImage(
+                                            imageUrl: ImageHelper.getFullImageUrl(category.image),
+                                            height: 40.h,
+                                            width: 40.w,
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) => Center(
+                                              child: CircularProgressIndicator(
+                                                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                                                strokeWidth: 2.w,
+                                              ),
+                                            ),
+                                            errorWidget: (context, url, error) => Icon(
+                                              Icons.category,
+                                              size: 32.sp,
+                                              color: AppColors.textSecondary,
+                                            ),
+                                          )
+                                              : Icon(
+                                            Icons.category,
+                                            size: 32.sp,
+                                            color: AppColors.textSecondary,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5.h),
+                                        Text(category.name ?? '', style: TextStyle(fontSize: 12.sp, color: Colors.grey[700])),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
-                              child: Column(
-                                children: [
-                                  // Container(
-                                  //   padding: EdgeInsets.all(12.w),
-                                  //   decoration: const BoxDecoration(color: Color(0xFFFDF7E7), shape: BoxShape.circle),
-                                  //   child: Image.network(ImageHelper.getFullImageUrl(category.image), height: 35.h, width: 35.w),
-                                  // ),
-                                  Container(
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.background,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      child: category.image != null
-                                          ? CachedNetworkImage(
-                                        imageUrl: ImageHelper.getFullImageUrl(category.image),
-                                        height: 40.h,
-                                        width: 40.w,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator(
-                                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                                            strokeWidth: 2.w,
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) => Icon(
-                                          Icons.category,
-                                          size: 32.sp,
-                                          color: AppColors.textSecondary,
-                                        ),
-                                      )
-                                          : Icon(
-                                        Icons.category,
-                                        size: 32.sp,
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5.h),
-                                  Text(category.name ?? '', style: TextStyle(fontSize: 12.sp, color: Colors.grey[700])),
-                                ],
-                              ),
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
 
