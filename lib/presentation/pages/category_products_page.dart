@@ -56,8 +56,8 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
           onPressed: () => Navigator.pop(context),
           icon: CircleAvatar(
             radius: 18.r,
-            backgroundColor: AppColors.primary,
-            child: Icon(Icons.arrow_back_ios_new, size: 16.sp, color: Colors.black),
+            backgroundColor: const Color(0xFFFFCC33),
+            child: Icon(Icons.arrow_back_ios_new, size: 14.sp, color: Colors.black),
           ),
         ),
         title: Text(

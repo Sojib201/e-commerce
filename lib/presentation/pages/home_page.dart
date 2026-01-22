@@ -38,6 +38,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -137,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         child: Text(
                                           'See all',
-                                          style: TextStyle(fontSize: 14.sp, color: Colors.grey, fontWeight: FontWeight.w500),
+                                          style: TextStyle(fontSize: 14.sp, color: Colors.black45, fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ],
