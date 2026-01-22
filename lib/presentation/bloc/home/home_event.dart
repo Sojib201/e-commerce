@@ -8,3 +8,11 @@ abstract class HomeEvent extends Equatable {
 }
 
 class LoadHomeData extends HomeEvent {}
+
+class SearchProducts extends HomeEvent {
+  final String query;
+  const SearchProducts(this.query);
+
+  @override
+  List<Object> get props => [query];
+}

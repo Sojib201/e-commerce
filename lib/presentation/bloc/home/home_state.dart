@@ -29,3 +29,11 @@ class HomeError extends HomeState {
   @override
   List<Object> get props => [message];
 }
+
+class HomeSearchLoaded extends HomeState {
+  final List<NewArrivalProduct> searchResults;
+  const HomeSearchLoaded(this.searchResults);
+
+  @override
+  List<Object> get props => [searchResults];
+}
