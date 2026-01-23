@@ -69,9 +69,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ),
                           Text(
                             'Popular Sells',
-                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: Colors.black87),
+                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500, color: Colors.black87),
                           ),
-                          Icon(Icons.favorite, color: Colors.red, size: 26.sp),
+                          Icon(Icons.favorite, color: Colors.red, size: 28.sp),
                         ],
                       ),
                     ),
@@ -164,52 +164,97 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               scrollDirection: Axis.horizontal,
                               physics: const BouncingScrollPhysics(),
                               child: Container(
-                                width: MediaQuery.of(context).size.width,
+                                constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: List.generate(allImages.length, (index) {
-                                      return GestureDetector(
-                                        onTap: () => setState(() => _selectedImageIndex = index),
-                                        child: Container(
-                                          width: 65.w,
-                                          height: 65.h,
-                                          margin: EdgeInsets.symmetric(horizontal: 6.w),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.05),
-                                                blurRadius: 10,
-                                                offset: const Offset(0, 5),
-                                              )
-                                            ],
-                                            border: Border.all(
-                                              color: _selectedImageIndex == index
-                                                  ? const Color(0xFFFFCC33)
-                                                  : Colors.transparent,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(8.r),
-                                            child: CachedNetworkImage(
-                                              imageUrl: ImageHelper.getFullImageUrl(allImages[index]),
-                                              fit: BoxFit.contain,
-                                            ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(allImages.length, (index) {
+                                    return GestureDetector(
+                                      onTap: () => setState(() => _selectedImageIndex = index),
+                                      child: Container(
+                                        width: 65.w,
+                                        height: 65.h,
+                                        margin: EdgeInsets.symmetric(horizontal: 6.w),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius: BorderRadius.circular(8.r),
+                                          border: Border.all(
+                                            color: _selectedImageIndex == index
+                                                ? const Color(0xFFFFCC33)
+                                                : Colors.transparent,
+                                            width: 2,
                                           ),
                                         ),
-                                      );
-                                    }),
-                                  ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8.r),
+                                          child: CachedNetworkImage(
+                                            imageUrl: ImageHelper.getFullImageUrl(allImages[index]),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                                 ),
                               ),
                             ),
                           ),
                         ),
+
+                        // Positioned(
+                        //   top: 5.h,
+                        //   left: 0,
+                        //   right: 0,
+                        //   child: SizedBox(
+                        //     height: 65.h,
+                        //     child: SingleChildScrollView(
+                        //       scrollDirection: Axis.horizontal,
+                        //       physics: const BouncingScrollPhysics(),
+                        //       child: Container(
+                        //         width: MediaQuery.of(context).size.width,
+                        //         padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: List.generate(allImages.length, (index) {
+                        //             return GestureDetector(
+                        //               onTap: () => setState(() => _selectedImageIndex = index),
+                        //               child: Container(
+                        //                 width: 65.w,
+                        //                 height: 65.h,
+                        //                 margin: EdgeInsets.symmetric(horizontal: 6.w),
+                        //                 decoration: BoxDecoration(
+                        //                   color: Colors.white,
+                        //                   borderRadius: BorderRadius.circular(8.r),
+                        //                   boxShadow: [
+                        //                     BoxShadow(
+                        //                       color: Colors.black.withOpacity(0.05),
+                        //                       blurRadius: 10,
+                        //                       offset: const Offset(0, 5),
+                        //                     )
+                        //                   ],
+                        //                   border: Border.all(
+                        //                     color: _selectedImageIndex == index
+                        //                         ? const Color(0xFFFFCC33)
+                        //                         : Colors.transparent,
+                        //                     width: 2,
+                        //                   ),
+                        //                 ),
+                        //                 child: ClipRRect(
+                        //                   borderRadius: BorderRadius.circular(8.r),
+                        //                   child: CachedNetworkImage(
+                        //                     imageUrl: ImageHelper.getFullImageUrl(allImages[index]),
+                        //                     fit: BoxFit.contain,
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             );
+                        //           }),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
